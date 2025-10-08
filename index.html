@@ -7,68 +7,31 @@
   <meta name="color-scheme" content="dark light">
   <title>Chiefy Nduom</title>
   <link rel="stylesheet" href="https://stackedit.io/style.css" />
-  <script>
-    (function () {
-      var storedTheme;
-
-      try {
-        storedTheme = typeof localStorage !== 'undefined'
-          ? localStorage.getItem('preferred-theme')
-          : null;
-      } catch (error) {
-        storedTheme = null;
-      }
-
-      var initialTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'dark';
-      document.documentElement.dataset.theme = initialTheme;
-      document.documentElement.style.colorScheme = initialTheme;
-    })();
-  </script>
   <style>
     :root {
-      background-color: #0f1115;
-      color: #f1f5f9;
+      color-scheme: dark;
     }
 
     body {
       transition: background-color 0.3s ease, color 0.3s ease;
-      background-color: inherit;
-      color: inherit;
     }
 
-    body a {
-      transition: color 0.3s ease;
+    body.dark-mode {
+      background-color: #0f1115;
+      color: #f1f5f9;
     }
 
-    :root[data-theme="dark"] a {
+    body.dark-mode a {
       color: #60a5fa;
     }
 
-    :root[data-theme="light"] {
+    body.light-mode {
       background-color: #f8fafc;
       color: #0f172a;
     }
 
-    :root[data-theme="light"] a {
+    body.light-mode a {
       color: #1d4ed8;
-    }
-
-    :root[data-theme="dark"] .stackedit__left,
-    :root[data-theme="dark"] .stackedit__right,
-    :root[data-theme="dark"] .stackedit__toc,
-    :root[data-theme="dark"] .stackedit__html {
-      background-color: rgba(15, 17, 21, 0.85);
-      color: inherit;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    :root[data-theme="light"] .stackedit__left,
-    :root[data-theme="light"] .stackedit__right,
-    :root[data-theme="light"] .stackedit__toc,
-    :root[data-theme="light"] .stackedit__html {
-      background-color: rgba(248, 250, 252, 0.92);
-      color: inherit;
-      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .theme-toggle {
@@ -80,7 +43,7 @@
       border-radius: 9999px;
       font-size: 0.9rem;
       cursor: pointer;
-      background-color: rgba(148, 163, 184, 0.18);
+      background-color: rgba(148, 163, 184, 0.2);
       color: inherit;
       backdrop-filter: blur(4px);
     }
@@ -88,16 +51,6 @@
     .theme-toggle:focus-visible {
       outline: 2px solid currentColor;
       outline-offset: 2px;
-    }
-
-    :root[data-theme="light"] .theme-toggle {
-      background-color: rgba(30, 41, 59, 0.12);
-      color: #0f172a;
-    }
-
-    :root[data-theme="dark"] .theme-toggle {
-      background-color: rgba(148, 163, 184, 0.18);
-      color: #f1f5f9;
     }
   </style>
 </head>
@@ -111,7 +64,7 @@
   gtag('config', 'G-E6YGT06SHF');
 </script>
   
-<body class="stackedit">
+<body class="stackedit dark-mode">
   <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to light mode">
     Switch to Light Mode
   </button>
@@ -149,9 +102,13 @@
     <div class="stackedit__html">
       <h1 id="P.W. Chiefy Nduom">P.W. Chiefy Nduom</h1>
 <p>Advisor, Advocate, Attorney</a> 
+<h2 id="Update Your Due Diligence">Update Your Due Diligence</h2>
+<a href="https://www.occ.treas.gov/news-issuances/news-releases/2025/nr-occ-2025-72.html">2025</a> - News Release on the Removal of GN Bank's Consent Order<br>
+<a href="https://www.occ.gov/static/enforcement-actions/eaAA-ENF-2025-39.pdf">2025</a> - Faith, persistence and grit helped us give this institution a shot at perpetual success. This is a small step in the right direction. More to come.<br>
+<h2 id="Currnet Activities">Current Activities</h2>
 <p><strong>Chief Operating Officer</strong>: <a href="https://gnbank.net">GN Bank</a><br>
 <p><strong>Advisory Director</strong>: <a href="https://gnbank.net">GN Bank</a><br>
-<p><strong>Consulting</strong>: <a href="https://www.linkedin.com/in/chiefy//">Linkedin</a></p>
+<p><strong>Consulting - Third Venture LLC</strong>: <a href="https://www.linkedin.com/in/chiefy//">Linkedin</a></p>
 <h2 id="contact">Contact</h2>
 <h6 id="linkedin"><a href="https://www.linkedin.com/in/chiefy/">Linkedin</a>: <code>@CHIEFY</code></h6>
 <h6 id="peloton"><a href="https://account.onepeloton.com/referral/910983113c0c4e2e8e5b44d380c97130?guestPassCode=a2fa96e1730d4105bbef7d01935ba37a">Peloton</a>: <code>@thirdn</code></h6>
@@ -194,48 +151,42 @@ Liberia: <a href="https://www.kendejaresort.com.lr/">Kendeja Resort</a><br>
 
 <script>
   (function () {
-    var root = document.documentElement;
+    var body = document.body;
     var toggle = document.getElementById('theme-toggle');
+    var storedTheme = localStorage.getItem('preferred-theme');
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    if (!toggle) {
-      return;
-    }
-
-    function getStoredTheme() {
-      try {
-        return typeof localStorage !== 'undefined'
-          ? localStorage.getItem('preferred-theme')
-          : null;
-      } catch (error) {
-        return null;
-      }
-    }
-
-    function setStoredTheme(theme) {
-      try {
-        if (typeof localStorage !== 'undefined') {
-          localStorage.setItem('preferred-theme', theme);
-        }
-      } catch (error) {
-        // Ignored when storage is unavailable.
-      }
+    function setRootColorScheme(theme) {
+      document.documentElement.style.colorScheme = theme;
     }
 
     function applyTheme(theme) {
       var normalizedTheme = theme === 'light' ? 'light' : 'dark';
-      root.dataset.theme = normalizedTheme;
-      root.style.colorScheme = normalizedTheme;
+      body.classList.remove('light-mode', 'dark-mode');
+      body.classList.add(normalizedTheme + '-mode');
+      setRootColorScheme(normalizedTheme);
       toggle.textContent = normalizedTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
       toggle.setAttribute('aria-label', normalizedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-      setStoredTheme(normalizedTheme);
+      localStorage.setItem('preferred-theme', normalizedTheme);
+    }
+
+    function initializeTheme() {
+      if (storedTheme === 'light' || storedTheme === 'dark') {
+        applyTheme(storedTheme);
+      } else {
+        applyTheme('dark');
+      }
     }
 
     toggle.addEventListener('click', function () {
-      var nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      applyTheme(nextTheme);
+      if (body.classList.contains('dark-mode')) {
+        applyTheme('light');
+      } else {
+        applyTheme('dark');
+      }
     });
 
-    applyTheme(getStoredTheme() || root.dataset.theme || 'dark');
+    initializeTheme();
   })();
 </script>
 
