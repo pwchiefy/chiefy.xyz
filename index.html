@@ -4,8 +4,102 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark light">
   <title>Chiefy Nduom</title>
   <link rel="stylesheet" href="https://stackedit.io/style.css" />
+  <script>
+    (function () {
+      var storedTheme;
+
+      try {
+        storedTheme = typeof localStorage !== 'undefined'
+          ? localStorage.getItem('preferred-theme')
+          : null;
+      } catch (error) {
+        storedTheme = null;
+      }
+
+      var initialTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'dark';
+      document.documentElement.dataset.theme = initialTheme;
+      document.documentElement.style.colorScheme = initialTheme;
+    })();
+  </script>
+  <style>
+    :root {
+      background-color: #0f1115;
+      color: #f1f5f9;
+    }
+
+    body {
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-color: inherit;
+      color: inherit;
+    }
+
+    body a {
+      transition: color 0.3s ease;
+    }
+
+    :root[data-theme="dark"] a {
+      color: #60a5fa;
+    }
+
+    :root[data-theme="light"] {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    :root[data-theme="light"] a {
+      color: #1d4ed8;
+    }
+
+    :root[data-theme="dark"] .stackedit__left,
+    :root[data-theme="dark"] .stackedit__right,
+    :root[data-theme="dark"] .stackedit__toc,
+    :root[data-theme="dark"] .stackedit__html {
+      background-color: rgba(15, 17, 21, 0.85);
+      color: inherit;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    :root[data-theme="light"] .stackedit__left,
+    :root[data-theme="light"] .stackedit__right,
+    :root[data-theme="light"] .stackedit__toc,
+    :root[data-theme="light"] .stackedit__html {
+      background-color: rgba(248, 250, 252, 0.92);
+      color: inherit;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background-color: rgba(148, 163, 184, 0.18);
+      color: inherit;
+      backdrop-filter: blur(4px);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+
+    :root[data-theme="light"] .theme-toggle {
+      background-color: rgba(30, 41, 59, 0.12);
+      color: #0f172a;
+    }
+
+    :root[data-theme="dark"] .theme-toggle {
+      background-color: rgba(148, 163, 184, 0.18);
+      color: #f1f5f9;
+    }
+  </style>
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E6YGT06SHF"></script>
@@ -18,6 +112,9 @@
 </script>
   
 <body class="stackedit">
+  <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to light mode">
+    Switch to Light Mode
+  </button>
   <div class="stackedit__left">
     <div class="stackedit__toc">
       
@@ -94,5 +191,52 @@ Liberia: <a href="https://www.kendejaresort.com.lr/">Kendeja Resort</a><br>
     </div>
   </div>
 </body>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var toggle = document.getElementById('theme-toggle');
+
+    if (!toggle) {
+      return;
+    }
+
+    function getStoredTheme() {
+      try {
+        return typeof localStorage !== 'undefined'
+          ? localStorage.getItem('preferred-theme')
+          : null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function setStoredTheme(theme) {
+      try {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('preferred-theme', theme);
+        }
+      } catch (error) {
+        // Ignored when storage is unavailable.
+      }
+    }
+
+    function applyTheme(theme) {
+      var normalizedTheme = theme === 'light' ? 'light' : 'dark';
+      root.dataset.theme = normalizedTheme;
+      root.style.colorScheme = normalizedTheme;
+      toggle.textContent = normalizedTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+      toggle.setAttribute('aria-label', normalizedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+      setStoredTheme(normalizedTheme);
+    }
+
+    toggle.addEventListener('click', function () {
+      var nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+    });
+
+    applyTheme(getStoredTheme() || root.dataset.theme || 'dark');
+  })();
+</script>
 
 </html>
