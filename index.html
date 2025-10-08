@@ -6,6 +6,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chiefy Nduom</title>
   <link rel="stylesheet" href="https://stackedit.io/style.css" />
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark-mode {
+      background-color: #0f1115;
+      color: #f1f5f9;
+    }
+
+    body.dark-mode a {
+      color: #60a5fa;
+    }
+
+    body.light-mode {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    body.light-mode a {
+      color: #1d4ed8;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background-color: rgba(148, 163, 184, 0.2);
+      color: inherit;
+      backdrop-filter: blur(4px);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+  </style>
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E6YGT06SHF"></script>
@@ -17,7 +63,10 @@
   gtag('config', 'G-E6YGT06SHF');
 </script>
   
-<body class="stackedit">
+<body class="stackedit dark-mode">
+  <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to light mode">
+    Switch to Light Mode
+  </button>
   <div class="stackedit__left">
     <div class="stackedit__toc">
       
@@ -94,5 +143,46 @@ Liberia: <a href="https://www.kendejaresort.com.lr/">Kendeja Resort</a><br>
     </div>
   </div>
 </body>
+
+<script>
+  (function () {
+    var body = document.body;
+    var toggle = document.getElementById('theme-toggle');
+    var storedTheme = localStorage.getItem('preferred-theme');
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    function setRootColorScheme(theme) {
+      document.documentElement.style.colorScheme = theme;
+    }
+
+    function applyTheme(theme) {
+      var normalizedTheme = theme === 'light' ? 'light' : 'dark';
+      body.classList.remove('light-mode', 'dark-mode');
+      body.classList.add(normalizedTheme + '-mode');
+      setRootColorScheme(normalizedTheme);
+      toggle.textContent = normalizedTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+      toggle.setAttribute('aria-label', normalizedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+      localStorage.setItem('preferred-theme', normalizedTheme);
+    }
+
+    function initializeTheme() {
+      if (storedTheme === 'light' || storedTheme === 'dark') {
+        applyTheme(storedTheme);
+      } else {
+        applyTheme('dark');
+      }
+    }
+
+    toggle.addEventListener('click', function () {
+      if (body.classList.contains('dark-mode')) {
+        applyTheme('light');
+      } else {
+        applyTheme('dark');
+      }
+    });
+
+    initializeTheme();
+  })();
+</script>
 
 </html>
