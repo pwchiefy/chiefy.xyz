@@ -153,37 +153,78 @@ Liberia: <a href="https://www.kendejaresort.com.lr/">Kendeja Resort</a><br>
   (function () {
     var body = document.body;
     var toggle = document.getElementById('theme-toggle');
-    var storedTheme = localStorage.getItem('preferred-theme');
-    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var storageKey = 'preferred-theme';
+
+    if (!body || !toggle) {
+      return;
+    }
+
+    var canPersistTheme = true;
+    try {
+      var testKey = storageKey + '-check';
+      localStorage.setItem(testKey, '1');
+      localStorage.removeItem(testKey);
+    } catch (err) {
+      canPersistTheme = false;
+    }
+
+    function getStoredTheme() {
+      if (!canPersistTheme) {
+        return null;
+      }
+
+      try {
+        return localStorage.getItem(storageKey);
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function persistTheme(theme) {
+      if (!canPersistTheme) {
+        return;
+      }
+
+      try {
+        localStorage.setItem(storageKey, theme);
+      } catch (err) {
+        /* no-op */
+      }
+    }
 
     function setRootColorScheme(theme) {
       document.documentElement.style.colorScheme = theme;
     }
 
-    function applyTheme(theme) {
+    function applyTheme(theme, shouldPersist) {
       var normalizedTheme = theme === 'light' ? 'light' : 'dark';
       body.classList.remove('light-mode', 'dark-mode');
       body.classList.add(normalizedTheme + '-mode');
       setRootColorScheme(normalizedTheme);
-      toggle.textContent = normalizedTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
-      toggle.setAttribute('aria-label', normalizedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-      localStorage.setItem('preferred-theme', normalizedTheme);
+
+      var isDark = normalizedTheme === 'dark';
+      toggle.textContent = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+      toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+
+      if (shouldPersist) {
+        persistTheme(normalizedTheme);
+      }
     }
 
     function initializeTheme() {
+      var storedTheme = getStoredTheme();
+
       if (storedTheme === 'light' || storedTheme === 'dark') {
-        applyTheme(storedTheme);
-      } else {
-        applyTheme('dark');
+        applyTheme(storedTheme, false);
+        return;
       }
+
+      applyTheme('dark', false);
     }
 
     toggle.addEventListener('click', function () {
-      if (body.classList.contains('dark-mode')) {
-        applyTheme('light');
-      } else {
-        applyTheme('dark');
-      }
+      var nextTheme = body.classList.contains('dark-mode') ? 'light' : 'dark';
+      applyTheme(nextTheme, true);
     });
 
     initializeTheme();
